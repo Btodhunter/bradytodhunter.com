@@ -1,0 +1,7 @@
+.btn-facebook{background:#3b5998}
+
+.btn-twitter{background:#55acee}
+
+.background {background: url(/static/img/background.jpg) no-repeat center center;
+    background-size: cover;
+    height: 100%;}
