@@ -1,12 +1,13 @@
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, BooleanField, TextAreaField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, Email
 from app.models import User
 
 
 class EditForm(Form):
     nickname = StringField('nickname', validators=[DataRequired()])
     about_me = TextAreaField('about_me', validators=[Length(min=0, max=140)])
+    email = StringField('email', validators=[DataRequired(), Email()])
 
     def __init__(self, original_nickname, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -34,3 +35,4 @@ class PostForm(Form):
 
 class SearchForm(Form):
     search = StringField('search', validators=[DataRequired()])
+

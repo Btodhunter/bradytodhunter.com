@@ -16,15 +16,24 @@
                     {% endfor %}
                 </div>
             </div>
-        <div class="control-group{% if form.errors.post %} error{% endif %}">
-            <label class="control-label" for="about_me">About yourself:</label>
-            <div class="controls">
-                {{ form.about_me(cols = 64, rows = 4, class = "span4") }}
-                {% for error in form.errors.about_me %}
-                    <span class="help-inline">[{{error}}]</span><br>
-                {% endfor %}
+            <div class="control-group{% if form.errors.post %} error{% endif %}">
+                <label class="control-label" for="email">Your email:</label>
+                <div class="controls">
+                    {{ form.email(maxlength = 64, class = "span4") }}
+                    {% for error in form.errors.email %}
+                        <span class="help-inline">[{{error}}]</span><br>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
+            <div class="control-group{% if form.errors.post %} error{% endif %}">
+                <label class="control-label" for="about_me">About yourself:</label>
+                <div class="controls">
+                    {{ form.about_me(cols = 64, rows = 4, class = "span4") }}
+                    {% for error in form.errors.about_me %}
+                        <span class="help-inline">[{{error}}]</span><br>
+                    {% endfor %}
+                </div>
+            </div>
             <div class="control-group">
                 <div class="controls">
                     <input class="btn btn-primary" type="submit" value="Save Changes">

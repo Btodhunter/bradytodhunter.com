@@ -17,6 +17,7 @@
 
   </head>
   <body>
+  <div class="container-fluid">
     <div class="navbar">
       <div class="navbar-inner">
         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -24,12 +25,16 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-        <a class="brand" href="/">BradyTodhunter.com</a>
+        <a class="brand" href="/">Brady Todhunter</a>
         <ul class="nav">
           <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="{{ url_for('resume') }}">Resume</a></li>
+          <li><a href="{{ url_for('blog') }}">My Blog</a></li>
           {% if g.user.is_authenticated %}
           <li><a href="{{ url_for('user', nickname = g.user.nickname) }}">Your Profile</a></li>
           <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          {% else %}
+          <li><a href="{{ url_for('login') }}">Login</a></li>
           {% endif %}
         </ul>
         <div class="nav-collapse collapse">
@@ -39,12 +44,12 @@
         </div>
       </div>
     </div>
-      <div class="container">
-        <div class="row">
-          <div class="span12">
-            {% block content %}{% endblock %}
-          </div>
-        </div>
+    <div class="row-fluid">
+      <div class="span12">
+        {% block content %}{% endblock %}
       </div>
+    </div>
+  </div>
+
   </body>
 </html>

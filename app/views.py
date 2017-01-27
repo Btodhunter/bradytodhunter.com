@@ -15,24 +15,35 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
-@app.route('/index/<int:page>', methods=['GET', 'POST'])
-@login_required
-def index(page=1):
+@app.route('/')
+@app.route('/index')
+def index():
+    return render_template('index.html', title='Home')
+
+
+@app.route('/blog', methods=['GET', 'POST'])
+@app.route('/blog/<int:page>', methods=['GET', 'POST'])
+def blog(page=1):
     form = PostForm()
     if form.validate_on_submit():
         post = Post(body=form.post.data, timestamp=datetime.utcnow(), author=g.user)
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')
-        return redirect(url_for('index'))
-
-    posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
-    return render_template('index.html',
-                           title='Home',
+        return redirect(url_for('blog'))
+    if g.user.is_authenticated:
+        posts = g.user.followed_posts().paginate(page, POSTS_PER_PAGE, False)
+    else:
+        posts = User.query.filter_by(nickname='btodhunter').first().posts.paginate(page, POSTS_PER_PAGE, False)
+    return render_template('blog.html',
+                           title='My Blog',
                            form=form,
                            posts=posts)
+
+
+@app.route('/resume')
+def resume():
+    return render_template('resume.html', title='Resume')
 
 
 @app.route('/login')
@@ -109,11 +120,13 @@ def edit():
     if form.validate_on_submit():
         g.user.nickname = form.nickname.data
         g.user.about_me = form.about_me.data
+        g.user.email = form.email.data
         db.session.add(g.user)
         db.session.commit()
         flash('Your changes have been saved.')
         return redirect(url_for('edit'))
     else:
+        form.email.data = g.user.email
         form.nickname.data = g.user.nickname
         form.about_me.data = g.user.about_me
     return render_template('edit.html', form=form)
