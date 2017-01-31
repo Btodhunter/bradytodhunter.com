@@ -36,7 +36,10 @@ class User(UserMixin, db.Model):
         return '<User %r>' % self.nickname
 
     def avatar(self, size):
-        return 'http://www.gravatar.com/avatar/%s?d=mm&s=%d' % (md5(self.email.encode('utf-8')).hexdigest(), size)
+        if 'facebook' in self.social_id:
+            return 'http://graph.facebook.com/v2.8/{}/picture?height={}&width={}'.format(self.social_id.split('$')[-1], size, size)
+        else:
+            return 'http://www.gravatar.com/avatar/{}?d=mm&s={}'.format(md5(self.email.encode('utf-8')).hexdigest(), size)
 
     @staticmethod
     def make_unique_nickname(nickname):
@@ -83,3 +86,12 @@ class Post(db.Model):
 if enable_search:
     whooshalchemy.whoosh_index(app, Post)
 
+
+class FavoriteURL(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(64))
+
+
+class FavoritePages(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    page = db.Column(db.Integer)

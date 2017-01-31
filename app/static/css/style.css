@@ -2,20 +2,11 @@
 
 .btn-twitter{background:#55acee}
 
-.background {background: url(/static/img/background.jpg) no-repeat center center;
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    min-height: 600px;
-    min-width: 100%;
-}
-
-.img-fluid{
-    min-height: 300px;
-    max-height: 600px;
-    height: 100%;
-    width: 100%;
+.background {
+  position: cover;
+  /* Preserve aspet ratio */
+  min-width: 100%;
+  min-height: auto;
 }
 
 .intro-message > h1 {
@@ -27,3 +18,4 @@
 .intro-message > h3 {
     text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
 }
+

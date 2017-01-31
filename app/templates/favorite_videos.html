@@ -1,0 +1,10 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+{% for url in favorites %}
+<ul>
+    <li>{{ url }}</li>
+</ul>
+{% endfor %}
+{% endblock %}

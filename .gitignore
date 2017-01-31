@@ -1,8 +1,9 @@
 app.db
 test.db
-flask/
-seach.db/
-tmp/
-db_repository/
+flask/*
+seach.db/*
+tmp/*
+db_repository/*
 *.pyc
 app/*.pyc
+config.py
