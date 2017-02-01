@@ -2,9 +2,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Edit Your Profile</h1>
   {% include 'flash.html' %}
-    <div class="well">
+    <div class="well well-large">
+        <h1>Edit Your Profile</h1>
         <form class="form-horizontal" action="" method="post" name="edit">
             {{form.hidden_tag()}}
             <div class="control-group{% if form.errors.post %} error{% endif %}">
@@ -19,7 +19,7 @@
             <div class="control-group{% if form.errors.post %} error{% endif %}">
                 <label class="control-label" for="email">Your email:</label>
                 <div class="controls">
-                    {{ form.email(maxlength = 64, class = "span4") }}
+                    {{ form.email(maxlength = 128, class = "span4") }}
                     {% for error in form.errors.email %}
                         <span class="help-inline">[{{error}}]</span><br>
                     {% endfor %}

@@ -30,7 +30,7 @@ class LoginForm(Form):
 
 
 class PostForm(Form):
-    post = StringField('post', validators=[DataRequired()])
+    post = TextAreaField('post', validators=[Length(min=0, max=140), DataRequired()])
 
 
 class SearchForm(Form):

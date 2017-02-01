@@ -2,9 +2,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% for url in favorites %}
-<ul>
-    <li>{{ url }}</li>
-</ul>
+<div class="container-fluid">
+    <div class="row-fluid">
+{% for url in favorites.items %}
+        <div class="col-md-6">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe src={{ url.url }} allowfullscreen class="embed-responsive-item" padding="0" frameborder="0"></iframe>
+            </div>
+        </div>
 {% endfor %}
+        <div class="col-md-12">
+            <ul class="pager">
+                {% if favorites.has_prev %}
+                <li class="previous"><a href="{{ url_for('fav_vids', page = favorites.prev_num) }}">Previous Videos</a></li>
+                {% else %}
+                <li class="previous disabled"><a href="#">Previous Videos</a></li>
+                {% endif %}
+                {% if favorites.has_next %}
+                <li class="next"><a href="{{ url_for('fav_vids', page = favorites.next_num) }}">Next Videos</a></li>
+                {% else %}
+                <li class="next disabled"><a href="#">Next Videos</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}

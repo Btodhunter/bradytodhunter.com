@@ -7,29 +7,34 @@
     <title>Brady Todhunter</title>
     {% endif %}
     <link href="/static/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen">
-    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" media="screen">
     <link href="/static/css/font-awesome.min.css" rel="stylesheet" type="text/css" media="screen">
     <link href="/static/css/bootstrap-social.css" rel="stylesheet" type="text/css" media="screen">
-    <link href="/static/css/style.css" rel="stylesheet" type="text/css" media="screen">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   </head>
   <body>
-  <div class="container">
-    <div class="navbar">
-      <div class="navbar-inner">
-        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-        </a>
-        <a class="brand" href="/">Brady Todhunter</a>
-        <ul class="nav">
+        </button>
+        <a class="navbar-brand" href="/">Brady Todhunter</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
           <li><a href="{{ url_for('index') }}">Home</a></li>
           <li><a href="{{ url_for('resume') }}">Resume</a></li>
           <li><a href="{{ url_for('blog') }}">My Blog</a></li>
+          <li><a href="{{ url_for('fav_vids') }}">My Favorite Videos</a></li>
           {% if g.user.is_authenticated %}
           <li><a href="{{ url_for('user', nickname = g.user.nickname) }}">Your Profile</a></li>
           <li><a href="{{ url_for('logout') }}">Logout</a></li>
@@ -37,19 +42,14 @@
           <li><a href="{{ url_for('login') }}">Login</a></li>
           {% endif %}
         </ul>
-        <div class="nav-collapse collapse">
-          {% if g.user.is_authenticated %}
-          <form class="navbar-search pull-right" action="{{url_for('search')}}" method="post" name="search">{{g.search_form.hidden_tag()}}{{g.search_form.search(size=20,placeholder="Search",class="search-query")}}</form>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="span12">
-        {% block content %}{% endblock %}
-      </div>
-    </div>
-  </div>
+        {% if g.user.is_authenticated %}
+        <form class="navbar-form navbar-right" action="{{url_for('search')}}" method="post" name="search">{{g.search_form.hidden_tag()}}{{g.search_form.search(size=20,placeholder="Search",class="search-query")}}</form>
+        {% endif %}
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+
+  {% block content %}{% endblock %}
 
   </body>
 </html>

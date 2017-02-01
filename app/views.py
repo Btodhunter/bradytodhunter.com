@@ -5,7 +5,7 @@ from .forms import EditForm, PostForm, SearchForm
 from .models import User, Post, FavoriteURL, FavoritePages
 from oauth import OAuthSignIn
 from datetime import datetime
-from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS
+from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, VIDEOS_PER_PAGE
 from fav_vids import get_page_numbers, get_video_url
 
 lm.login_view = 'login'
@@ -210,50 +210,54 @@ def search_results(query):
 
 
 @app.route('/favorite_videos')
-def fav_vids():
+@app.route('/favorite_videos/<int:page>')
+def fav_vids(page=1):
     page_nums = get_page_numbers()
-    db_urls = FavoriteURL.query.with_entities(FavoriteURL.url).all()
-    db_pages = FavoritePages.query.with_entities(FavoritePages.page).all()
+    page_urls = get_video_url(page_nums)
+    db_urls = []
+    db_pages = []
+    favorites = []
 
-    if db_pages is None:
-        for page in page_nums:
-            db.session.add(FavoritePages(page=page))
+    for url in FavoriteURL.query.all():
+        db_urls.append(url.url)
+
+    for fav_page in FavoritePages.query.all():
+        db_pages.append(fav_page.page)
+
+    if not db_pages:
+        for fav_page in page_nums:
+            db.session.add(FavoritePages(page=fav_page))
             db.session.commit()
 
     elif len(db_pages) != len(page_nums):
-        for page in page_nums:
-            if page not in db_pages:
-                db.session.add(FavoritePages(page=page))
+        for pages in page_nums:
+            if pages not in db_pages:
+                db.session.add(FavoritePages(page=pages))
                 db.session.commit()
 
-    if db_urls is None:
-        for url in get_video_url(page_nums):
+    if not db_urls:
+        for url in page_urls:
             db.session.add(FavoriteURL(url=url))
             db.session.commit()
 
-        favorites = FavoriteURL.query.with_entities(FavoriteURL.url).all()
+        favorites = FavoriteURL.query.with_entities(FavoriteURL.url).paginate(page, VIDEOS_PER_PAGE, False)
 
-    elif get_video_url(page_nums[-1])[-1] not in FavoriteURL.query.with_entities(FavoriteURL.url).all():
-        if len(db_pages) == len(page_nums):
-            for url in get_video_url(page_nums[-1]):
-                if url not in FavoriteURL.query.filter_by(url=url):
+    elif len(page_urls) != len(db_urls):
+        if set(page_urls).intersection(db_urls) is not None:
+            for url in page_urls:
+                if url not in db_urls:
                     db.session.add(FavoriteURL(url=url))
                     db.session.commit()
 
-            favorites = FavoriteURL.query.with_entities(FavoriteURL.url).all()
+            for url in db_urls:
+                if url not in page_urls:
+                    db.session.delete(FavoriteURL.query.filter_by(url=url).first())
+                    db.session.commit()
 
-        else:
-            new_page = len(page_nums) - len(db_pages)
-            while new_page > 0:
-                for url in get_video_url(page_nums[-new_page]):
-                    if url not in FavoriteURL.query.filter_by(url=url):
-                        db.session.add(FavoriteURL(url=url))
-                        db.session.commit()
-                new_page -= 1
-
-            favorites = FavoriteURL.query.with_entities(FavoriteURL.url).all()
+            favorites = FavoriteURL.query.with_entities(FavoriteURL.url).paginate(page, VIDEOS_PER_PAGE, False)
 
     else:
-        favorites = db_urls
+        favorites = FavoriteURL.query.with_entities(FavoriteURL.url).paginate(page, VIDEOS_PER_PAGE, False)
 
     return render_template('favorite_videos.html', title='My Favorite Videos', favorites=favorites)
+
