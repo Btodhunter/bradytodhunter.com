@@ -34,14 +34,12 @@ def get_video_url(page_nums):
                                "html.parser").find_all('a'):
             if 'video' in a.get('href'):
                 video = [s for s in str(a.get('href')).split('/') if s.isdigit()]
-                for x in video:
-                    video_id.add(x)
+                for i in video:
+                    video_id = i
 
-    video_urls = []
-
-    for i in video_id:
-        video_urls.append('http://www.pinkbike.com/v/embed/{}/?colors=000000'.format(i))
+    video_urls = set()
+    for url in video_id:
+        video_urls.add('http://www.pinkbike.com/v/embed/{}/?colors=000000'.format(url))
 
     return video_urls
-
 

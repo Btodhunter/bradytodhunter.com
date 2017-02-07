@@ -92,6 +92,6 @@ class FavoriteURL(db.Model):
     url = db.Column(db.String(64))
 
 
-class FavoritePages(db.Model):
+class LastUpdateTime(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    page = db.Column(db.Integer)
+    date = db.Column(db.DateTime)

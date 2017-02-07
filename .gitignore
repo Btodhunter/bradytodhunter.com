@@ -7,3 +7,4 @@ db_repository/*
 *.pyc
 app/*.pyc
 config.py
+development.py

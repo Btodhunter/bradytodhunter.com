@@ -7,7 +7,7 @@
 {% for url in favorites.items %}
         <div class="col-md-6">
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe src={{ url.url }} allowfullscreen class="embed-responsive-item" padding="0" frameborder="0"></iframe>
+                <iframe src={{ url.url }} allowfullscreen allowtransparency="true" class="embed-responsive-item"></iframe>
             </div>
         </div>
 {% endfor %}
@@ -28,3 +28,4 @@
     </div>
 </div>
 {% endblock %}
+
