@@ -35,11 +35,24 @@ def get_video_url(page_nums):
             if 'video' in a.get('href'):
                 video = [s for s in str(a.get('href')).split('/') if s.isdigit()]
                 for i in video:
-                    video_id = i
+                    video_id.add(i)
 
-    video_urls = set()
-    for url in video_id:
-        video_urls.add('http://www.pinkbike.com/v/embed/{}/?colors=000000'.format(url))
+    # video_urls = set()
+    # for url in video_id:
+    #     video_urls.add('http://www.pinkbike.com/v/embed/{}/?colors=000000'.format(url))
 
-    return video_urls
+    return video_id
 
+
+def get_embed_page(favorite_id):
+    embed_page = urllib2.urlopen('http://www.pinkbike.com/v/embed/{}/%3Fcolors%3D000000'.format(favorite_id))
+
+    embed_html = BeautifulSoup(embed_page, "html.parser")
+
+    new_style = '.video-container {position: inherit;background; #000000;}'
+
+    embed_html.style.insert(0, new_style)
+    embed_html.find_all('script')[2].extract()
+    embed_html.find_all('script')[0].extract()
+
+    return embed_html.prettify()

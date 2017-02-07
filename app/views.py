@@ -6,7 +6,7 @@ from .models import User, Post, FavoriteURL, LastUpdateTime
 from oauth import OAuthSignIn
 from datetime import datetime, timedelta
 from config import POSTS_PER_PAGE, MAX_SEARCH_RESULTS, VIDEOS_PER_PAGE
-from fav_vids import get_page_numbers, get_video_url
+from fav_vids import get_page_numbers, get_video_url, get_embed_page
 
 lm.login_view = 'login'
 
@@ -217,7 +217,7 @@ def fav_vids(page=1):
     try:
         last_updated = LastUpdateTime.query.all()[0].date
     except IndexError:
-        last_updated = today
+        last_updated = today - timedelta(1)
         db.session.add(LastUpdateTime(date=last_updated))
         db.session.commit()
 
@@ -258,3 +258,10 @@ def fav_vids(page=1):
         favorites = FavoriteURL.query.with_entities(FavoriteURL.url).paginate(page, VIDEOS_PER_PAGE, False)
 
     return render_template('favorite_videos.html', title='My Favorite Videos', favorites=favorites)
+
+
+@app.route('/embed_video/<video_id>')
+def embed_video(video_id):
+    embeded_html = get_embed_page(video_id)
+
+    return render_template('embed_video.html', embeded_html=embeded_html)

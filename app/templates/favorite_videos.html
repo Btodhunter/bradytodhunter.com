@@ -5,9 +5,9 @@
 <div class="container-fluid">
     <div class="row-fluid">
 {% for url in favorites.items %}
-        <div class="col-md-6">
+        <div class="col-md-6" style="padding-left:0;padding-right:0;">
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe src={{ url.url }} allowfullscreen allowtransparency="true" class="embed-responsive-item"></iframe>
+                <iframe src="{{ url_for('embed_video', video_id=url.url) }}" allowfullscreen allowtransparency="true" class="embed-responsive-item"></iframe>
             </div>
         </div>
 {% endfor %}
